@@ -1,0 +1,37 @@
+from threading import Thread
+import time
+import socket
+
+def get_address():
+    global address =input("enter IP address")
+    return address
+def get_port():
+   global port = input("enter port here")
+   return port
+
+def daemon():
+    daemon_socket= socket.socket(socket.AF_INET, socket.sock_STREAM)
+    daemon_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
+    daemon_socket.bind(get_address(),get_port())
+    daemon_socket.listen(5)
+    print(f"listning on {port} with {address}")
+    while True:
+        client_socket, client_address = daemon_socket.accept()
+        print(f"accepted connection from {client_address} on port{client_socket}")
+        try:
+            data =client_socket.recv(1024)
+            if data:
+                print(f"recieved ") 
+                response = "coming soon"
+                client_socket.sendfile(response)
+        finally:
+            client_socket.close()
+
+    
+    
+    
+   
+thread = Thread(target= daemon, daemon=True)
+#daeomon thread closes itself once process if finnished after thread.join
+thread.join()
+thread.start()
